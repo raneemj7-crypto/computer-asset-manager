@@ -1,65 +1,73 @@
-# Assetly — Computer Asset Management System
+# Assetly - Computer Asset Manager Part 2
 
-SE411 · Fall 2026–2027 · Part 1
+SE411 Fall 2026-2027
 
-A responsive React frontend for managing **one kind of company asset: computers**. Assets are stored in an **in-memory JavaScript object collection**, with no backend or database, as required for Part 1.
+This version connects the original React frontend to a simple Spring Boot REST server. The backend follows the same package style used in Labs 14 and 15: model, repository, service, controller, H2 SQL files, and JUnit/Mockito tests.
 
-## Features
-- Dashboard with total, assigned, available, and maintenance counts; status distribution; total purchase cost.
-- Add computers with validated required fields and unique serial numbers.
-- Edit computers, delete with confirmation, and view inventory in a table.
-- Search by ID, computer name, brand, serial number, assignee, or department.
-- Filter by status and computer type; export currently filtered records as CSV.
-- Navigation menu for Overview, Computers, and About the team.
-- About page displaying four team members and their student IDs.
-- Responsive layout for desktop and mobile.
+## Project folders
 
-## Run locally
-Requirements: A Node.js version supported by your installed Vite and Vitest versions, plus npm. The application was tested on Node.js 24.10.0; newer dependencies may require a newer Node version.
+```text
+computer-asset-manager-phase2/
+|- backend/       Spring Boot server and H2 database
+|- src/           React frontend
+|- docs/          Project documentation
+|- package.json   Frontend dependencies and scripts
+```
+
+## 1. Run the backend
+
+Java 17 is recommended, matching the course setup.
+
+```bash
+cd backend
+./mvnw spring-boot:run
+```
+
+The server runs at `http://localhost:8080`. H2 seed data is loaded from `backend/src/main/resources/data.sql` whenever the server starts.
+
+## 2. Run the frontend
+
+Open a second terminal in the project root:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite (typically http://localhost:5173).
+Open `http://localhost:5173`.
 
-## Run tests and build
+## Run all tests
+
+Backend tests:
+
 ```bash
-npm test
-npm run build
+cd backend
+./mvnw test
 ```
 
-## Important Part 1 limitation
-Changes are stored in React state while the application is open. **Refreshing the page resets the collection to the eight seed objects.** No database, server, browser storage, or authentication is used. A manually developed backend can be introduced in Part 2.
+Frontend tests:
 
-## Team members
-| Name | Student ID |
+```bash
+npm test
+```
+
+Verified before delivery: 12 backend tests passed, 10 frontend tests passed, and the Vite production build completed successfully.
+
+## REST API
+
+| Operation | Method | Route | Success response |
+|---|---|---|---|
+| Add a computer | POST | `/api/v1/computers` | 201 Created |
+| Get paginated computers | GET | `/api/v1/computers?page=0&size=5` | 200 OK |
+| Find a computer by ID | GET | `/api/v1/computers/{id}` | 200 OK |
+| Update a computer | PUT | `/api/v1/computers/{id}` | 204 No Content |
+| Delete a computer | DELETE | `/api/v1/computers/{id}` | 204 No Content |
+
+## Team
+
+| Student | ID |
 |---|---|
 | Layan Mohammed Algublan | 221410621 |
 | Raneem Jehad Mahmoud Abumoustafa | 222410457 |
 | Hatoon Abdullah | 222410226 |
 | Nora Basim Saleh Alomair | 222410172 |
-
-## Verified results (October 15, 2026)
-- `npm test`: **9/9 passed** across 2 test files (Vitest 5.0.4).
-- `npm run build`: **successful** (Vite 8.3.4).
-- `npm audit`: **0 vulnerabilities** at the most recent check.
-
-## Architecture and stack
-See [PROJECT_DOCUMENTATION.md](PROJECT_DOCUMENTATION.md) for requirements, architecture, technologies, tests, and design.
-
-## Publish to GitHub
-1. Create a new **public** GitHub repository (for example `se411-computer-asset-manager`).
-2. Inside this project folder run:
-```bash
-git init
-git add .
-git commit -m "Build SE411 Part 1 computer asset manager"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/se411-computer-asset-manager.git
-git push -u origin main
-```
-3. One team member submits the resulting public repository URL by **October 17, 2026**.
-
-Replace `YOUR_USERNAME` with your GitHub username.

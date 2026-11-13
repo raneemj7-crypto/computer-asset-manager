@@ -1,4 +1,5 @@
 export const money = (value) => new Intl.NumberFormat('en-SA', { style: 'currency', currency: 'SAR', maximumFractionDigits: 0 }).format(Number(value) || 0);
+export const assetId = (id) => `AST-${String(id).padStart(3, '0')}`;
 export function nextAssetId(assets) {
   const max = assets.reduce((n, asset) => Math.max(n, Number(asset.id?.match(/^AST-(\d+)$/)?.[1] || 0)), 0);
   return `AST-${String(max + 1).padStart(3, '0')}`;
@@ -16,5 +17,5 @@ export function validateAsset(asset, assets, editingId = null) {
 }
 export function filterAssets(assets, { search = '', status = 'All statuses', category = 'All types' } = {}) {
   const term = search.toLowerCase().trim();
-  return assets.filter(a => (status === 'All statuses' || a.status === status) && (category === 'All types' || a.category === category) && [a.id, a.name, a.brand, a.serial, a.assignedTo, a.department].some(v => String(v).toLowerCase().includes(term)));
+  return assets.filter(a => (status === 'All statuses' || a.status === status) && (category === 'All types' || a.category === category) && [a.id, assetId(a.id), a.name, a.brand, a.serial, a.assignedTo, a.department].some(v => String(v).toLowerCase().includes(term)));
 }
